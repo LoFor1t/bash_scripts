@@ -1,0 +1,29 @@
+#! /bin/bash
+
+file_name="$1"
+max_str_len=0
+max_string=''
+
+# s=$(strings -0 "$file_name");
+
+if [ -r $file_name ];
+then
+    s=$(strings -0 "$file_name");
+    for line in $s;
+    do
+        # len=$(echo "$line" | wc -c)
+        # len=$(./calc_script $len -1) 
+        len=${#line}
+        if [ $len -gt $max_str_len ]; 
+        then
+            max_str_len=$len
+            max_string=$line
+        fi
+
+    done
+
+    echo "Result is $max_string, with length - $max_str_len"
+else 
+    echo "Input file isn't exist or isn't readable"
+fi
+
