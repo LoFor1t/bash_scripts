@@ -1,0 +1,39 @@
+#! /bin/bash
+
+dir="$1"
+
+if [ ! -d $dir ];
+then
+    echo "NOT DIR"
+    exit
+fi
+
+if [[ "$OSTYPE" == "darwin"* ]];
+then
+    cont_files=$(stat -f %Sm "$dir"/* | cut -c 8-9)
+fi
+
+if [[ "$OSTYPE" == "linux-gnu" ]];
+then
+    cont_files=$(stat -f %Sm "$dir"/* | cut -c 12-13)
+fi
+
+for i in {0..23};
+do
+    hours[$i]=0;
+done
+
+for i in $cont_files;
+do
+    j=${i#0}
+    ((hours[j]=${hours[j]} + 1 ));
+done
+
+echo -e "Hours \t Files   Hours \t Files"
+echo -e "----- \t -----   ----- \t -----" 
+
+for k in {0..11};
+do
+    ((m=$k+12))
+    echo -e "$k \t ${hours[k]} \t $m \t ${hours[$m]}"
+done
